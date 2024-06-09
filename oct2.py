@@ -10,7 +10,6 @@ from keras.layers import Dense, Dropout, Activation, Flatten, Conv2D, MaxPooling
 from keras.preprocessing.image import ImageDataGenerator
 from keras.optimizers import Adam, RMSprop
 
-# Name of h5 files 
 NAME = "Macular-Degeneration"
 
 # Import files
@@ -42,7 +41,7 @@ for features, label in training_data:
     X.append(features)
     y.append(label)
 
-X = np.array(X).reshape(-1, IMG_SIZE, IMG_SIZE, 1)  # Specify the number of channels (1 for grayscale)
+X = np.array(X).reshape(-1, IMG_SIZE, IMG_SIZE, 1)  
 y = np.array(y)
 
 X = X / 255.0
@@ -59,7 +58,7 @@ datagen = ImageDataGenerator(
 
 datagen.fit(X)
 
-# Define a more complex model
+
 model = Sequential()
 
 model.add(Conv2D(64, (3, 3), input_shape=X.shape[1:]))
@@ -85,12 +84,12 @@ model.add(Dropout(0.5))
 model.add(Dense(len(CATEGORIES)))  # Assuming multi-class classification
 model.add(Activation('softmax'))  # Using softmax for multi-class
 
-# Compile the model with an alternative optimizer
+
 model.compile(
     loss='sparse_categorical_crossentropy',  # For multi-class classification
     optimizer=RMSprop(learning_rate=0.001),
     metrics=['accuracy']
 )
 
-# Train the model with data augmentation
+
 model.fit(datagen.flow(X, y, batch_size=32), epochs=50)
